@@ -1,16 +1,8 @@
+import 'package:clinic_mobile/clinic_app.dart';
+import 'package:clinic_mobile/core/Routing/app_routre.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( ClinicApp(appRoutre:AppRoutre() ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Hello, world!'))),
-    );
-  }
-}

@@ -11,9 +11,9 @@ class ClinicApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
-      child: const MaterialApp(
+      child:  MaterialApp(
         debugShowCheckedModeBanner:false,
-        onGenerateRoute:appRoutre,
+        onGenerateRoute:appRoutre.generateRoute,
       ),
     );
   }
