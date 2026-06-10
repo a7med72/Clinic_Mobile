@@ -10,11 +10,8 @@ class AppColorScheme {
     onSecondary: AppColors.secondaryContainerLight,
     error: AppColors.errorLight,
     onError: AppColors.warningLight,
-    background: AppColors.backgroundLight,
-    onBackground: AppColors.onBackgroundTextLight,
     surface: AppColors.surfaceLight,
     onSurface: AppColors.surfaceContainerLowInputsLight,
-
   );
 
   static const dark = ColorScheme(
@@ -25,8 +22,6 @@ class AppColorScheme {
     onSecondary: AppColors.secondaryContainerDark,
     error: AppColors.errorDark,
     onError: AppColors.warningDark,
-    background: AppColors.backgroundDark,
-    onBackground: AppColors.onBackgroundTextLight,
     surface: AppColors.surfaceDark,
     onSurface: AppColors.surfaceContainerLowDark,
   );
