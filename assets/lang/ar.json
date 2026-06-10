@@ -1,0 +1,22 @@
+{
+  "this_field_is_required": "هذا الحقل مطلوب",
+  "clinic_name": "اسم العياده",
+  "Hello_in_ClinicEasy": "مرحبا بك في ClinicEasy",
+  "we_help_you_manage_your_clinic_easily_and_efficiently": "لنساعدك في إدارة عيادتك بسهولة وكفاءة",
+  "Managment_of_appointments_and_patient_easily": "إدارة المواعيد والمرضى بسهولة",
+  "Organize_Medical_Description_Reports": "تنظيم الوصفات الطبية والتقارير",
+  "Monitor_Clinic_Activity_in_Real_Time": "متابعه اداه العياده فى الوقت الحقيقى",
+  "go_to_dashboard": "اذهب إلى لوحة التحكم",
+  "Next": "التالي",
+  "Clinic_Information": "معلومات العيادة",
+  "Please_fill_in_your_clinic_basic_information_to_get_started": "يرجى إدخال معلومات عيادتك الأساسية للبدء",
+  "Specialization": "التخصص",
+  "phone_number": "رقم الهاتف",
+  "Select_role": "اختر الدور",
+  "Please_select_the_role_that_suits_your_work": "يرجى اختيار الدور الذي يناسب عملك",
+  "setting_has_been_successfully": "تم الإعداد بنجاح",
+  "the_clinic_is_ready_to_use_now": "العيادة جاهزة للاستخدام الآن",
+  "You_can_start_clinic_management_easily": "يمكنك البدء في إدارة العيادة بسهولة",
+  "create_appointment": "إنشاء موعد",
+  "add_first_patient": "أضف أول مريض"
+}

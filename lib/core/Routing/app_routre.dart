@@ -1,3 +1,4 @@
+import 'package:clinic_mobile/Feature/onBoard/onboard.dart';
 import 'package:clinic_mobile/core/Routing/routres.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,9 @@ class AppRoutre {
         return MaterialPageRoute(
           builder: (context) => const Text('Login Screen'),
         );
+
+      case Routre.onBoard:
+        return MaterialPageRoute(builder: (context) => const Onboard());
 
       default:
         return null;

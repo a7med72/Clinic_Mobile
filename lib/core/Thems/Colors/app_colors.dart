@@ -50,6 +50,7 @@ class AppColors {
   static const Color primaryDark = Color(0xffADC6FF);
   static const Color primarycontainerDark = Color(0xff4D8EFF);
   static const Color inverseprimaryDark = Color(0xff005AC2);
+
   ///secondary
   static const Color secondaryDark = Color(0xFF5EDBC1);
   static const Color secondaryContainerDark = Color(0xFF005144);
@@ -74,6 +75,9 @@ class AppColors {
 
   ///Dialogs Dark
   static const Color surfaceContainerHighestDialogsDark = Color(0xff32353C);
+
+  ///Borders Dark
+  static const Color outlineDark = Color(0xFF5C616D);
   //
   static const Color successDark = Color(0xff06402a);
   static const Color warningDark = Color(0xffEC942C);
