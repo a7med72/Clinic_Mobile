@@ -1,0 +1,22 @@
+{
+  "this_field_is_required": "This field is required",
+  "clinic_name": "Clinic Name",
+  "Hello_in_ClinicEasy": "Hello in ClinicEasy",
+  "we_help_you_manage_your_clinic_easily_and_efficiently": "We help you manage your clinic easily and efficiently",
+  "Managment_of_appointments_and_patient_easily": "Management of appointments and patient easily",
+  "Organize_Medical_Description_Reports": "Organize Medical Description Reports",
+  "Monitor_Clinic_Activity_in_Real_Time": "Monitor Clinic Activity in Real Time",
+  "go_to_dashboard": "Go to Dashboard",
+  "Next": "Next",
+  "Clinic_Information": "Clinic Information",
+  "Please_fill_in_your_clinic_basic_information_to_get_started": "Please fill in your clinic basic information to get started",
+  "Specialization": "Specialization",
+  "phone_number": "Phone Number",
+  "Select_role": "Select Role",
+  "Please_select_the_role_that_suits_your_work": "Please select the role that suits your work",
+  "setting_has_been_successfully": "Setting has been successfully",
+  "the_clinic_is_ready_to_use_now": "The clinic is ready to use now",
+  "You_can_start_clinic_management_easily": "You can start clinic management easily",
+  "create_appointment": "Create Appointment",
+  "add_first_patient": "Add First Patient"
+}
