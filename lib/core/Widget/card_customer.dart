@@ -29,7 +29,7 @@ class CardCustomer extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: context.extraColors.borderColor.withOpacity(.9),
+              color: context.extraColors.borderColor.withValues(alpha: .9),
               blurRadius: 4,
               offset: const Offset(1, 1),
             ),

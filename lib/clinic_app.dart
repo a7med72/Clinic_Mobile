@@ -51,7 +51,7 @@ class ClinicApp extends StatelessWidget {
                 },
 
                 // ✅ Routing
-                initialRoute: Routre.onBoard,
+                initialRoute: Routre.login,
                 onGenerateRoute: appRoutre.generateRoute,
               ),
             );

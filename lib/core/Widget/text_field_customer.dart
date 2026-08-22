@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../Thems/Spacing/spacing_extension.dart';
@@ -77,7 +76,7 @@ class TextFieldCustomer extends StatelessWidget {
             ),
         suffixIcon: suffixIcon,
         prefixIcon: prefixIcon,
-        fillColor: context.extraColors.text.withOpacity(0.03),
+        fillColor: context.extraColors.text.withValues(alpha: 0.06),
         filled: true,
       ),
       obscureText: obscureText ?? false,

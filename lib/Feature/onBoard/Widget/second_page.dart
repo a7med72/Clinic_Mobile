@@ -26,7 +26,7 @@ class SecondPage extends StatelessWidget {
               "Please_fill_in_your_clinic_basic_information_to_get_started",
             )),
             style: TextStyles.bodyRegularMedium.copyWith(
-              color: context.extraColors.text.withOpacity(0.7),
+              color: context.extraColors.text.withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
           ),
@@ -78,7 +78,7 @@ class FieldOnboard extends StatelessWidget {
       labelText: label,
       suffixIcon: Icon(
         icon.icon,
-        color: context.extraColors.text.withOpacity(0.7),
+        color: context.extraColors.text.withValues(alpha: 0.7),
         size: 20,
       ),
     );

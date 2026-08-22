@@ -1,5 +1,4 @@
 import 'package:clinic_mobile/core/Localization/extension_locale.dart';
-import 'package:clinic_mobile/core/Thems/Spacing/spacing_extension.dart';
 import 'package:clinic_mobile/core/Thems/Theme/theme_extensions.dart';
 import 'package:clinic_mobile/core/Thems/Typography/styles.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +30,7 @@ class _ThirdPageState extends State<ThirdPage> {
           Text(
             (context.tr("Please_select_the_role_that_suits_your_work")),
             style: TextStyles.bodyRegularMedium.copyWith(
-              color: context.extraColors.text.withOpacity(0.7),
+              color: context.extraColors.text.withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
           ),
@@ -69,7 +68,7 @@ class CardOnboard extends StatelessWidget {
           ? null
           : Border.all(
               width: 1.5.w,
-              color: context.colors.primary.withOpacity(1),
+              color: context.colors.primary.withValues(alpha: 1),
             ),
       child: Row(
         children: [
@@ -89,7 +88,7 @@ class CardOnboard extends StatelessWidget {
               Text(
                 "Doctor",
                 style: TextStyles.bodyRegularMedium.copyWith(
-                  color: context.extraColors.text.withOpacity(0.6),
+                  color: context.extraColors.text.withValues(alpha: 0.6),
                 ),
               ),
             ],

@@ -59,13 +59,13 @@ class FourthPage extends StatelessWidget {
                     width: 100.w,
                     height: 40.h,
                     decoration: BoxDecoration(
-                      color: context.colors.secondary.withOpacity(.09),
+                      color: context.colors.secondary.withValues(alpha: .09),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.calendar_month,
                       size: 40,
-                      color: context.colors.secondary.withOpacity(.9),
+                      color: context.colors.secondary.withValues(alpha: .9),
                     ),
                   ),
                   20.vh,
@@ -96,13 +96,13 @@ class FourthPage extends StatelessWidget {
                     width: 100.w,
                     height: 40.h,
                     decoration: BoxDecoration(
-                      color: context.colors.onPrimaryContainer.withOpacity(.09),
+                      color: context.colors.onPrimaryContainer.withValues(alpha: .09),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.person,
                       size: 40,
-                      color: context.colors.onPrimaryContainer.withOpacity(.9),
+                      color: context.colors.onPrimaryContainer.withValues(alpha: .9),
                     ),
                   ),
                   20.vh,

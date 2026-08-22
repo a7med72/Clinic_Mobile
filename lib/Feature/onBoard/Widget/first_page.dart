@@ -26,7 +26,7 @@ class FirstPage extends StatelessWidget {
               "we_help_you_manage_your_clinic_easily_and_efficiently",
             )),
             style: TextStyles.bodyRegularMedium.copyWith(
-              color: context.extraColors.text.withOpacity(0.7),
+              color: context.extraColors.text.withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
           ),

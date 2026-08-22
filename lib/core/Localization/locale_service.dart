@@ -1,29 +1,20 @@
 import 'package:clinic_mobile/core/Helpers/Storage/SharedPreference/shared_pref_helper.dart';
-import 'package:clinic_mobile/core/Localization/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 
 class LocaleService {
-  static const _key = 'locale';
+  static const _key = 'local';
 
-  /// Get initial locale from shared preference or device locale.
-  /// Falls back to the first supported locale when the device locale is unsupported.
+  /// Get initial locale from shared preference or device locale
   Future<Locale> getInitialLocale() async {
-    final savedLanguageCode = await SharedPrefHelper.getData<String>(_key);
+    final save = await SharedPrefHelper.getData<String>(_key);
 
-    if (savedLanguageCode != null &&
-        AppLocalization.supportedLocales.any(
-          (locale) => locale.languageCode == savedLanguageCode,
-        )) {
-      return Locale(savedLanguageCode);
+    if (save != null) {
+      return Locale(save);
     }
+    final deviceLang =
+        WidgetsBinding.instance.platformDispatcher.locale.languageCode;
 
-    final deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
-    final supportedLocale = AppLocalization.supportedLocales.firstWhere(
-      (locale) => locale.languageCode == deviceLocale.languageCode,
-      orElse: () => AppLocalization.supportedLocales.first,
-    );
-
-    return supportedLocale;
+    return Locale(deviceLang);
   }
 
   /// Save locale to shared preference

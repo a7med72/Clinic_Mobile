@@ -7,6 +7,7 @@ import 'package:clinic_mobile/core/Localization/extension_locale.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/Routing/extension_router.dart';
+import '../../core/Routing/routres.dart';
 import '../../core/Thems/Spacing/spacing_extension.dart';
 import '../../core/Widget/button_customer.dart';
 
@@ -58,11 +59,11 @@ class _OnboardState extends State<Onboard> {
                   children: pages,
                 ),
               ),
-              // Spacer(),
+              // Spacer()
               ButtonCustomer(
                 onPressed: () {
                   if (currentPage == totalPages - 1) {
-                    context.pushNamed('home');
+                    context.pushNamed(Routre.home);
                   } else {
                     pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
