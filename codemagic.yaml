@@ -27,9 +27,13 @@ workflows:
       events:
         - push
         - tag
-      branches:
-        include:
-          - main
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+          source: true
+      tag_patterns:
+        - pattern: '*'
+          include: true
       cancel_previous_builds: true
     cache:
       cache_paths:
@@ -123,9 +127,13 @@ workflows:
       events:
         - push
         - tag
-      branches:
-        include:
-          - main
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+          source: true
+      tag_patterns:
+        - pattern: '*'
+          include: true
       cancel_previous_builds: true
     cache:
       cache_paths:
