@@ -7,7 +7,8 @@ import '../../Feature/Home Screen/pressentation/page/home_screen.dart';
 
 class AppRoutre {
   Route? generateRoute(RouteSettings settings) {
-    final argrments = settings.arguments;
+    // ignore: unused_local_variable
+    final arguments = settings.arguments;
     switch (settings.name) {
       case Routre.login:
         return MaterialPageRoute(

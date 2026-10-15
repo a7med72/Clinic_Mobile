@@ -1,0 +1,191 @@
+# Codemagic CI/CD configuration for Clinic Mobile Flutter Application
+# Docs: https://docs.codemagic.io/yaml-quick-start/building-a-flutter-app/
+
+workflows:
+  # ============================================================================
+  # Android Release Workflow
+  # ============================================================================
+  android-workflow:
+    name: Android Release Workflow
+    max_build_duration: 60
+    instance_type: linux_x2 # Fast Linux instance for cost-efficient Android builds
+    environment:
+      flutter: stable
+      java: 17
+      groups:
+        # Group defined in Codemagic UI -> Teams / Apps -> Environment variables
+        # Expected variables:
+        # - CM_KEYSTORE (base64 encoded .jks / .keystore file)
+        # - CM_KEYSTORE_PASSWORD
+        # - CM_KEY_ALIAS
+        # - CM_KEY_PASSWORD
+        # - GCLOUD_SERVICE_ACCOUNT_CREDENTIALS (optional for Google Play upload)
+        - android_credentials
+      vars:
+        PACKAGE_NAME: "com.example.clinic_mobile"
+    triggering:
+      events:
+        - push
+        - tag
+      branches:
+        include:
+          - main
+      cancel_previous_builds: true
+    cache:
+      cache_paths:
+        - ~/.gradle/caches
+        - ~/.pub-cache
+    scripts:
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$FLUTTER_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+
+      - name: Get Flutter dependencies
+        script: |
+          flutter packages pub get
+
+      - name: Run code generation (build_runner)
+        script: |
+          dart run build_runner build
+
+      - name: Flutter analyze
+        script: |
+          flutter analyze --no-fatal-infos
+
+      - name: Flutter unit tests
+        script: |
+          flutter test
+
+      - name: Configure Android keystore & key.properties
+        script: |
+          if [ -n "$CM_KEYSTORE" ]; then
+            echo "Setting up production keystore from environment variables..."
+            KEYSTORE_PATH="/tmp/keystore.keystore"
+            echo "$CM_KEYSTORE" | base64 --decode > "$KEYSTORE_PATH"
+            cat >> "$CM_BUILD_DIR/android/key.properties" <<EOF
+          storeFile=$KEYSTORE_PATH
+          storePassword=$CM_KEYSTORE_PASSWORD
+          keyAlias=$CM_KEY_ALIAS
+          keyPassword=$CM_KEY_PASSWORD
+          EOF
+            echo "key.properties created successfully."
+          else
+            echo "CM_KEYSTORE variable not detected. Build will proceed using debug keys."
+          fi
+
+      - name: Build Android App Bundle (AAB) & Universal APK
+        script: |
+          # Build AAB for Google Play Store release
+          flutter build appbundle --release
+
+          # Build Universal APK for testing & direct distribution
+          flutter build apk --release
+    artifacts:
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/*.apk
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - dev-team@example.com # Replace with your notification email
+        notify:
+          failure: true
+          success: true
+      # Google Play Store automated track publishing:
+      # google_play:
+      #   credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+      #   track: internal # Options: internal, alpha, beta, production
+      #   submit_as_draft: false
+
+  # ============================================================================
+  # iOS Release Workflow
+  # ============================================================================
+  ios-workflow:
+    name: iOS Release Workflow
+    max_build_duration: 60
+    instance_type: mac_mini_m2 # macOS runner required for Xcode builds
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      groups:
+        # Group defined in Codemagic UI -> Teams / Apps -> Environment variables
+        # Expected variables for automatic App Store code signing:
+        # - APP_STORE_CONNECT_KEY_IDENTIFIER (e.g. 2X9R4HXF34)
+        # - APP_STORE_CONNECT_ISSUER_ID (UUID from App Store Connect)
+        # - APP_STORE_CONNECT_PRIVATE_KEY (Contents of AuthKey_XXXXXX.p8)
+        # - CERTIFICATE_PRIVATE_KEY (RSA 2048 private key for distribution certificate)
+        - appstore_credentials
+      vars:
+        BUNDLE_ID: "com.example.clinicMobile"
+        # APP_STORE_APPLE_ID: 1234567890 # Replace with your App Store Apple ID if publishing
+    triggering:
+      events:
+        - push
+        - tag
+      branches:
+        include:
+          - main
+      cancel_previous_builds: true
+    cache:
+      cache_paths:
+        - ~/.pub-cache
+        - ~/Library/Caches/CocoaPods
+    scripts:
+      - name: Get Flutter dependencies
+        script: |
+          flutter packages pub get
+
+      - name: Run code generation (build_runner)
+        script: |
+          dart run build_runner build
+
+      - name: Flutter analyze
+        script: |
+          flutter analyze --no-fatal-infos
+
+      - name: Flutter unit tests
+        script: |
+          flutter test
+
+      - name: Install CocoaPods dependencies
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+
+      - name: Configure iOS code signing
+        script: |
+          keychain initialize
+          if [ -n "$APP_STORE_CONNECT_KEY_IDENTIFIER" ]; then
+            echo "Configuring automatic code signing with App Store Connect API..."
+            app-store-connect fetch-signing-files "$BUNDLE_ID" \
+              --type IOS_APP_STORE \
+              --create
+            keychain add-certificates
+            xcode-project use-profiles
+          else
+            echo "APP_STORE_CONNECT_KEY_IDENTIFIER not found. Building without code signing."
+          fi
+
+      - name: Build iOS IPA
+        script: |
+          if [ -n "$APP_STORE_CONNECT_KEY_IDENTIFIER" ]; then
+            flutter build ipa --release --export-options-plist=/Users/builder/export_options.plist
+          else
+            flutter build ipa --release --no-codesign
+          fi
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - dev-team@example.com # Replace with your notification email
+        notify:
+          failure: true
+          success: true
+      # App Store Connect / TestFlight automated publishing:
+      # app_store_connect:
+      #   auth: integration
+      #   submit_to_testflight: true
+      #   submit_to_app_store: false
