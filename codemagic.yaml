@@ -8,19 +8,13 @@ workflows:
   android-workflow:
     name: Android Release Workflow
     max_build_duration: 60
-    instance_type: linux_x2 # Fast Linux instance for cost-efficient Android builds
+    instance_type: mac_mini_m2 # Eligible for 500 free monthly minutes on personal accounts
     environment:
       flutter: stable
       java: 17
-      groups:
-        # Group defined in Codemagic UI -> Teams / Apps -> Environment variables
-        # Expected variables:
-        # - CM_KEYSTORE (base64 encoded .jks / .keystore file)
-        # - CM_KEYSTORE_PASSWORD
-        # - CM_KEY_ALIAS
-        # - CM_KEY_PASSWORD
-        # - GCLOUD_SERVICE_ACCOUNT_CREDENTIALS (optional for Google Play upload)
-        - android_credentials
+      # Uncomment the group below AFTER creating 'android_credentials' in Codemagic UI:
+      # groups:
+      #   - android_credentials
       vars:
         PACKAGE_NAME: "com.example.clinic_mobile"
     triggering:
@@ -91,15 +85,10 @@ workflows:
     publishing:
       email:
         recipients:
-          - dev-team@example.com # Replace with your notification email
+          - dev-team@example.com
         notify:
           failure: true
           success: true
-      # Google Play Store automated track publishing:
-      # google_play:
-      #   credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-      #   track: internal # Options: internal, alpha, beta, production
-      #   submit_as_draft: false
 
   # ============================================================================
   # iOS Release Workflow
@@ -107,22 +96,16 @@ workflows:
   ios-workflow:
     name: iOS Release Workflow
     max_build_duration: 60
-    instance_type: mac_mini_m2 # macOS runner required for Xcode builds
+    instance_type: mac_mini_m2 # Eligible for 500 free monthly minutes on personal accounts
     environment:
       flutter: stable
       xcode: latest
       cocoapods: default
-      groups:
-        # Group defined in Codemagic UI -> Teams / Apps -> Environment variables
-        # Expected variables for automatic App Store code signing:
-        # - APP_STORE_CONNECT_KEY_IDENTIFIER (e.g. 2X9R4HXF34)
-        # - APP_STORE_CONNECT_ISSUER_ID (UUID from App Store Connect)
-        # - APP_STORE_CONNECT_PRIVATE_KEY (Contents of AuthKey_XXXXXX.p8)
-        # - CERTIFICATE_PRIVATE_KEY (RSA 2048 private key for distribution certificate)
-        - appstore_credentials
+      # Uncomment the group below AFTER creating 'appstore_credentials' in Codemagic UI:
+      # groups:
+      #   - appstore_credentials
       vars:
         BUNDLE_ID: "com.example.clinicMobile"
-        # APP_STORE_APPLE_ID: 1234567890 # Replace with your App Store Apple ID if publishing
     triggering:
       events:
         - push
@@ -156,9 +139,13 @@ workflows:
         script: |
           flutter test
 
-      - name: Install CocoaPods dependencies
+      - name: Prepare iOS dependencies & CocoaPods
         script: |
-          find . -name "Podfile" -execdir pod install \;
+          # Ensure Flutter prepares iOS project files
+          flutter build ios --config-only
+          if [ -f "ios/Podfile" ]; then
+            cd ios && pod install && cd ..
+          fi
 
       - name: Configure iOS code signing
         script: |
@@ -171,29 +158,34 @@ workflows:
             keychain add-certificates
             xcode-project use-profiles
           else
-            echo "APP_STORE_CONNECT_KEY_IDENTIFIER not found. Building without code signing."
+            echo "No App Store Connect credentials set in Codemagic environment variables."
+            echo "Workflow will proceed with an unsigned release build."
           fi
 
-      - name: Build iOS IPA
+      - name: Build iOS Application
         script: |
           if [ -n "$APP_STORE_CONNECT_KEY_IDENTIFIER" ]; then
+            echo "Building signed App Store IPA..."
             flutter build ipa --release --export-options-plist=/Users/builder/export_options.plist
           else
-            flutter build ipa --release --no-codesign
+            echo "Building unsigned iOS app..."
+            flutter build ios --release --no-codesign
+            # Package unsigned Runner.app into an unsigned .ipa archive
+            cd build/ios/iphoneos
+            mkdir -p Payload
+            cp -r Runner.app Payload/
+            zip -r "$CM_BUILD_DIR/build/ios/Runner-unsigned.ipa" Payload
+            cd "$CM_BUILD_DIR"
           fi
     artifacts:
       - build/ios/ipa/*.ipa
+      - build/ios/*.ipa
       - /tmp/xcodebuild_logs/*.log
       - flutter_drive.log
     publishing:
       email:
         recipients:
-          - dev-team@example.com # Replace with your notification email
+          - dev-team@example.com
         notify:
           failure: true
           success: true
-      # App Store Connect / TestFlight automated publishing:
-      # app_store_connect:
-      #   auth: integration
-      #   submit_to_testflight: true
-      #   submit_to_app_store: false
